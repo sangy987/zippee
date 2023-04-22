@@ -12,11 +12,11 @@ cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'allaboutstartingup'
-app.config['MAIL_PASSWORD'] = 'uaecsfchnzoutfqh'
+app.config['MAIL_USERNAME'] = ''
+app.config['MAIL_PASSWORD'] = ''
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_DEFAULT_SENDER'] = 'allaboutstartingup@gmail.com'
+app.config['MAIL_DEFAULT_SENDER'] = ''
 mail = Mail(app)
 
 
