@@ -1,19 +1,22 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 
-interface Data{
-  message : string;
+interface Data {
+  message: string;
   success: boolean;
 }
 
 @Component({
   selector: 'app-subscribe',
   templateUrl: './subscribe.component.html',
-  styleUrls: ['./subscribe.component.scss']
+  styleUrls: ['./subscribe.component.scss'],
 })
 export class SubscribeComponent {
   email: string = '';
   subscriptionSuccess = false;
+  errorMessage: string = '';
+  errorMessageFlag: boolean = false;
+
   constructor(private http: HttpClient) {}
   onSubmit() {
     const data = {
@@ -23,9 +26,11 @@ export class SubscribeComponent {
     this.http.post<Data>('http://localhost:5000/api/subscribe', data).subscribe(
       (response) => {
         this.subscriptionSuccess = response.success;
-        console.log("s",this.subscriptionSuccess);
       },
-      (error) => console.log(error)
+      (error) => {
+        this.errorMessage = error.error.message;
+        this.errorMessageFlag = true;
+      }
     );
   }
 }

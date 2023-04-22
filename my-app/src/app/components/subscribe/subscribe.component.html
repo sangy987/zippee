@@ -8,9 +8,11 @@
 
 <div class="login-link-container">
   <div class="login-link">
-    <p>Have an account?
-    <a routerLink="/login">Log in</a></p>
+    <p>Have an account? <a routerLink="/login">Log in</a></p>
   </div>
 </div>
 
-<div *ngIf="subscriptionSuccess" class="success-message">You have subscribed successfully!</div>
+<div *ngIf="subscriptionSuccess" class="success-message">
+  You have subscribed successfully!
+</div>
+<div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
