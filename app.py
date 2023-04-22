@@ -4,7 +4,7 @@ import psycopg2
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask_mail import Mail, Message
 import schedule
-import time
+from time import sleep
 import threading
 app = Flask(__name__)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
@@ -132,27 +132,38 @@ def subscribers():
     return jsonify(response)
 
 
-def send_email():
+def send_email(subject, body):
     with app.app_context():
         subscribers = get_all_subscribers()
         for subscriber in subscribers:
             try:
-                msg = Message('Morning message', recipients=[subscriber[1]])
-                msg.body = "This is a morning message"
+                msg = Message(subject=subject, recipients=[subscriber[1]])
+                msg.body = body
                 mail.send(msg)
+                print(msg,"hey")
             except:
                 continue
 
 
-def send_emails():
-    schedule.every().day.at("16:46").do(send_email)
+def send_emails(subject, body, time):
+    schedule.every().day.at(time).do(send_email, subject, body)
     while True:
         schedule.run_pending()
-        time.sleep(1)
+        sleep(1)
 
 
-email_thread = threading.Thread(target=send_emails)
-email_thread.start()
+@app.route('/api/send-mail', methods=['POST'])
+@cross_origin()
+def send_mail():
+    subject = request.json['subject']
+    body = request.json['body']
+    time = request.json['time']
+    email_thread = threading.Thread(
+        target=send_emails, args=(subject, body, time))
+    email_thread.start()
+
+    return jsonify({'message': 'Messages queued sucessfully'})
+
 
 if __name__ == "__main__":
     app.run(debug=True)
