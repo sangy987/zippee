@@ -45,15 +45,22 @@ conn = psycopg2.connect(
 
 cur = conn.cursor()
 
+# create users table if not exists
 cur.execute("""
     CREATE TABLE IF NOT EXISTS users_db1 (
         id SERIAL PRIMARY KEY,
-        email VARCHAR(255) NOT NULL UNIQUE,
+        name VARCHAR(255) NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
         password VARCHAR(255) NOT NULL
     );
 """)
 
-conn.commit()
+
+
+cur.execute("CREATE TABLE IF NOT EXISTS subscribers_db (id SERIAL PRIMARY KEY, email TEXT NOT NULL)")
+
+# close the cursor and connection
+cur.close()
 
 
 
@@ -98,7 +105,25 @@ def login():
     else:
         return jsonify({'success': False, 'message': 'Invalid credentials'})
     
+@app.route('/api/subscribe', methods=['POST'])
+@cross_origin()
+def subscribe():
+    email = request.json.get('email')
 
+    cur = conn.cursor()
+
+    cur.execute("""
+        INSERT INTO subscribers_db (email)
+        VALUES (%s)
+        RETURNING id;
+    """, (email,))
+
+    conn.commit()
+    content_type = request.headers.get('Content-Type')
+    if (content_type == 'application/json'):
+        return jsonify({'message': 'Subscribe successful!', 'success': True})
+    else:
+        return "Content type is not supported."
     
 if __name__ == "__main__":
     app.run(debug=True)
