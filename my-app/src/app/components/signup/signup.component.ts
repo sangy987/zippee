@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -9,7 +10,9 @@ import { HttpClient } from '@angular/common/http';
 export class SignupComponent {
   email: string = '';
   password: string = '';
-  constructor(private http: HttpClient) {}
+  errorMessage: string = '';
+  errorMessageFlag: boolean = false;
+  constructor(private http: HttpClient,private router: Router) {}
 
   onSubmit() {
     const data = {
@@ -20,8 +23,12 @@ export class SignupComponent {
     this.http.post('http://localhost:5000/api/signup', data).subscribe(
       (response) => {
         console.log(response);
+        this.router.navigate(['/dashboard']);
       },
-      (error) => console.log(error)
+      (error) => {
+        this.errorMessage = error.error.message;
+        this.errorMessageFlag = true;
+      }
     );
   }
 }

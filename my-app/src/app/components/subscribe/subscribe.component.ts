@@ -26,6 +26,7 @@ export class SubscribeComponent {
     this.http.post<Data>('http://localhost:5000/api/subscribe', data).subscribe(
       (response) => {
         this.subscriptionSuccess = response.success;
+        this.email = '';
       },
       (error) => {
         this.errorMessage = error.error.message;

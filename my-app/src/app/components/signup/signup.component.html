@@ -1,22 +1,49 @@
-<h1 class="signup-title">Sign up</h1>
-<form (ngSubmit)="onSubmit()">
-  <label for="email">Email</label>
-  <input type="email" id="email" name="email" [(ngModel)]="email" /><br /><br />
-
-  <label for="password">Password</label>
-  <input
-    type="password"
-    id="password"
-    name="password"
-    [(ngModel)]="password"
-  /><br /><br />
-
-  <button type="submit">Submit</button>
-</form>
-
-<div class="login-link-container">
-  <div class="login-link">
-    <p>Already have an account?
-    <a routerLink="/login">Log in</a></p>
-  </div>
-</div>
+<nb-layout center>
+  <nb-layout-column>
+    <nb-layout-header>Sign Up</nb-layout-header>
+    <form (ngSubmit)="onSubmit()">
+      <nb-card >
+        <nb-card-body>
+          <div class="padding">
+            <nb-form-field>
+              <nb-icon nbPrefix icon="at-outline" pack="eva"></nb-icon>
+              <input
+                status="info"
+                shape="semi-round"
+                fullWidth
+                type="text"
+                [(ngModel)]="email"
+                name="email"
+                nbInput
+                placeholder="Enter Email"
+              />
+            </nb-form-field>
+          </div>
+          <div class="padding">
+            <nb-form-field>
+              <input
+                status="info"
+                shape="semi-round"
+                type="text"
+                nbInput
+                fullWidth
+                placeholder="Enter password"
+                [(ngModel)]="password"
+                name="password"
+              />
+            </nb-form-field>
+          </div>
+        </nb-card-body>
+        <button type="submit">Submit</button>
+      </nb-card>
+    </form>
+    <div class="login-link-container">
+      <div class="login-link">
+        <p>Have an account? <a routerLink="/login">Log in</a></p>
+      </div>
+    </div>
+    <div *ngIf="errorMessage" class="error-message" center>
+      {{ errorMessage }}
+    </div>
+  </nb-layout-column>
+</nb-layout>

@@ -1,39 +1,51 @@
 <nb-layout center>
   <nb-layout-column>
-    <div *ngIf="isSignedUp">
+    <div>
       <nb-layout-header>Login</nb-layout-header>
 
       <form (ngSubmit)="onSubmit()">
-        <nb-card size="small">
+        <nb-card>
           <nb-card-body>
-            <nb-form-field>
-              <nb-icon nbPrefix icon="at-outline" pack="eva"></nb-icon>
-              <input
-                fullWidth
-                type="text"
-                [(ngModel)]="email"
-                name="email"
-                nbInput
-                placeholder="Enter Email"
-              />
-            </nb-form-field>
-            <nb-form-field>
-              <input type="text" nbInput fullWidth placeholder="Enter password" [(ngModel)]="password" name="password">
-            </nb-form-field>
+            <div class="padding">
+              <nb-form-field>
+                <nb-icon nbPrefix icon="at-outline" pack="eva"></nb-icon>
+                <input
+                  status="info"
+                  shape="semi-round"
+                  fullWidth
+                  type="text"
+                  [(ngModel)]="email"
+                  name="email"
+                  nbInput
+                  placeholder="Enter Email"
+                />
+              </nb-form-field>
+            </div>
+            <div class="padding">
+              <nb-form-field>
+                <input
+                  type="text"
+                  status="info"
+                  shape="semi-round"
+                  nbInput
+                  fullWidth
+                  placeholder="Enter password"
+                  [(ngModel)]="password"
+                  name="password"
+                />
+              </nb-form-field>
+            </div>
           </nb-card-body>
           <button class="submit-button" type="submit">Login</button>
         </nb-card>
       </form>
-      <div *ngIf="errorMessage">
-        {{ errorMessage }}
-      </div>
     </div>
     <div class="login-link-container">
       <div class="login-link">
-        <div *ngIf="!isSignedUp">
+        <div *ngIf="isSignedUp">
           <p>
-            You haven't signed up yet. Click <a routerLink="/signup">here</a> to
-            sign up.
+            {{ message }}
+            Click <a routerLink="/signup">here</a> to sign up if you haven't.
           </p>
         </div>
       </div>

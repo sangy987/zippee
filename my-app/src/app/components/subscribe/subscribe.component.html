@@ -2,7 +2,7 @@
   <nb-layout-column>
     <nb-layout-header>Subscribe</nb-layout-header>
     <form (ngSubmit)="onSubmit()">
-      <nb-card size="small">
+          <nb-card >
         <nb-card-body>
           <nb-form-field>
             <nb-icon nbPrefix icon="at-outline" pack="eva"></nb-icon>
@@ -13,6 +13,8 @@
               name="email"
               nbInput
               placeholder="Enter Email"
+              status="info"
+                shape="semi-round"
             />
           </nb-form-field>
         </nb-card-body>
