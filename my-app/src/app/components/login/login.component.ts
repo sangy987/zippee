@@ -13,10 +13,13 @@ interface Response {
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
+
   email: string = '';
   password: string = '';
   errorMessage: string = '';
   isSignedUp = true;
+  showPassword = true;
+
   constructor(private http: HttpClient, private router: Router) {}
 
   onSubmit() {

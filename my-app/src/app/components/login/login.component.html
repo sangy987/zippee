@@ -1,31 +1,42 @@
-<div *ngIf="isSignedUp">
-  <h1 class="signup-title">Login</h1>
-  <form (ngSubmit)="onSubmit()">
-    <label for="email">Email:</label>
-    <input type="email" id="email" [(ngModel)]="email" name="email" required />
+<nb-layout center>
+  <nb-layout-column>
+    <div *ngIf="isSignedUp">
+      <nb-layout-header>Login</nb-layout-header>
 
-    <label for="password">Password:</label>
-    <input
-      type="password"
-      id="password"
-      [(ngModel)]="password"
-      name="password"
-      required
-    />
-
-    <button type="submit">Login</button>
-  </form>
-  <div *ngIf="errorMessage">
-    {{ errorMessage }}
-  </div>
-</div>
-<div class="login-link-container">
-  <div class="login-link">
-    <div *ngIf="!isSignedUp">
-      <p>
-        You haven't signed up yet. Click <a routerLink="/signup">here</a> to
-        sign up.
-      </p>
+      <form (ngSubmit)="onSubmit()">
+        <nb-card size="small">
+          <nb-card-body>
+            <nb-form-field>
+              <nb-icon nbPrefix icon="at-outline" pack="eva"></nb-icon>
+              <input
+                fullWidth
+                type="text"
+                [(ngModel)]="email"
+                name="email"
+                nbInput
+                placeholder="Enter Email"
+              />
+            </nb-form-field>
+            <nb-form-field>
+              <input type="text" nbInput fullWidth placeholder="Enter password" [(ngModel)]="password" name="password">
+            </nb-form-field>
+          </nb-card-body>
+          <button class="submit-button" type="submit">Login</button>
+        </nb-card>
+      </form>
+      <div *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
     </div>
-  </div>
-</div>
+    <div class="login-link-container">
+      <div class="login-link">
+        <div *ngIf="!isSignedUp">
+          <p>
+            You haven't signed up yet. Click <a routerLink="/signup">here</a> to
+            sign up.
+          </p>
+        </div>
+      </div>
+    </div>
+  </nb-layout-column>
+</nb-layout>

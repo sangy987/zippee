@@ -83,7 +83,7 @@ def login():
     password = data['password']
     cur = conn.cursor()
     cur.execute(
-        "SELECT * FROM users WHERE email = %s AND password = %s", (email, password))
+        """SELECT * FROM users_db1 WHERE email = %s AND password = %s""", (email, password))
     user = cur.fetchone()
     cur.close()
     if user:
@@ -140,9 +140,18 @@ def send_email(subject, body):
                 msg = Message(subject=subject, recipients=[subscriber[1]])
                 msg.body = body
                 mail.send(msg)
-                print(msg,"hey")
+                update_status_in_database(subscriber[1], "Sent")
             except:
-                continue
+                update_status_in_database(subscriber[1], "Failed")
+
+
+def update_status_in_database(email, status):
+
+    cur.execute("""
+            UPDATE subscribers_db SET status = ? WHERE email = ?
+        """, (status, email))
+
+    conn.commit()
 
 
 def send_emails(subject, body, time):

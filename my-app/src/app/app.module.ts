@@ -10,6 +10,9 @@ import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { SubscribeComponent } from './components/subscribe/subscribe.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { NbThemeModule, NbLayoutModule, NbButtonGroupModule, NbInputModule, NbFormFieldModule, NbCardModule, NbIconModule } from '@nebular/theme';
+import { NbEvaIconsModule } from '@nebular/eva-icons';
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,7 +26,16 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    NoopAnimationsModule,
+    NbThemeModule.forRoot({ name: 'default' }),
+    NbLayoutModule,
+    NbEvaIconsModule,
+    NbButtonGroupModule,
+    NbInputModule,
+    NbFormFieldModule,
+    NbCardModule,
+    NbIconModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

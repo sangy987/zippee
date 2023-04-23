@@ -1,18 +1,35 @@
-<h1 class="signup-title">Subscribe</h1>
-<form (ngSubmit)="onSubmit()">
-  <label for="email">Email</label>
-  <input type="email" id="email" name="email" [(ngModel)]="email" /><br /><br />
+<nb-layout center>
+  <nb-layout-column>
+    <nb-layout-header>Subscribe</nb-layout-header>
+    <form (ngSubmit)="onSubmit()">
+      <nb-card size="small">
+        <nb-card-body>
+          <nb-form-field>
+            <nb-icon nbPrefix icon="at-outline" pack="eva"></nb-icon>
+            <input
+              fullWidth
+              type="text"
+              [(ngModel)]="email"
+              name="email"
+              nbInput
+              placeholder="Enter Email"
+            />
+          </nb-form-field>
+        </nb-card-body>
+        <button type="submit">Submit</button>
+      </nb-card>
+    </form>
+    <div class="login-link-container">
+      <div class="login-link">
+        <p>Have an account? <a routerLink="/login">Log in</a></p>
+      </div>
+    </div>
 
-  <button type="submit">Submit</button>
-</form>
-
-<div class="login-link-container">
-  <div class="login-link">
-    <p>Have an account? <a routerLink="/login">Log in</a></p>
-  </div>
-</div>
-
-<div *ngIf="subscriptionSuccess" class="success-message">
-  You have subscribed successfully!
-</div>
-<div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+    <div *ngIf="subscriptionSuccess" class="success-message">
+      You have subscribed successfully!
+    </div>
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+  </nb-layout-column>
+</nb-layout>
