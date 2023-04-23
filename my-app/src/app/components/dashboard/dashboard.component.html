@@ -1,18 +1,23 @@
-<nb-layout-header
-  >Welcome to the Dashboard!
-  <div class="flex-end">
+<nb-alert *ngIf="showAlert" status="success" closable (close)="onClose()">
+  You have been successfully authenticated!
+</nb-alert>
+<nb-layout>
+  <nb-layout-header>
     <button (click)="logout()" class="logout-btn">Logout</button>
-  </div>
-</nb-layout-header>
-<nb-layout center>
+  </nb-layout-header>
   <nb-layout-column>
-      <nb-layout-header>Compose Mail and Schedule It </nb-layout-header>
+    <nb-layout-header
+      >Compose Mail and Schedule It to subscribers</nb-layout-header
+    >
 
-      <form (ngSubmit)="sendMail()">
-        <nb-card size="small">
-          <nb-card-body class="example-items-col">
-            
-              <input  status="primary"
+    <form (ngSubmit)="sendMail()">
+      <nb-card size="small">
+        <nb-card-body class="example-items-col">
+          <div class="padding">
+            <nb-form-field>
+              <input
+                status="info"
+                shape="semi-round"
                 fullWidth
                 type="text"
                 [(ngModel)]="subject"
@@ -20,40 +25,49 @@
                 nbInput
                 placeholder="Enter Subject"
               />
-            
-            
+            </nb-form-field>
+          </div>
+
+          <div class="padding">
+            <nb-form-field>
               <textarea
-              status="primary"
+                status="info"
+                shape="semi-round"
+                fieldSize="giant"
                 nbInput
                 name="body"
                 [(ngModel)]="body"
                 fullWidth
                 placeholder="Body"
               ></textarea>
-            
-            
+            </nb-form-field>
+          </div>
+          <div class="padding">
+            <nb-form-field>
               <input
-              status="primary"
+                status="info"
+                shape="semi-round"
                 fullWidth
                 nbInput
                 [(ngModel)]="time"
-                type="text"
+                type="time"
                 [nbTimepicker]="timepicker"
                 name="time"
                 singleColumn
-                [step]="1"
               />
               <nb-timepicker #timepicker></nb-timepicker>
-            
-          </nb-card-body>
-          <button class="btn btn-primary" type="submit">Schedule Mail</button>
-        </nb-card>
-      </form>
+            </nb-form-field>
+          </div>
+        </nb-card-body>
+        <button class="btn btn-primary" type="submit">Schedule Mail</button>
+      </nb-card>
+    </form>
     <div *ngIf="subscriptionSuccess" class="success-message">
       {{ message }}
     </div>
   </nb-layout-column>
-  
+  <nb-layout-column>
+    <nb-layout-header>Mail Analytics</nb-layout-header>
+    <ng2-smart-table [settings]="settings" [source]="data"></ng2-smart-table
+  ></nb-layout-column>
 </nb-layout>
-
-

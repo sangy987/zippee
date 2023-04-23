@@ -6,17 +6,20 @@ from flask_mail import Mail, Message
 import schedule
 from time import sleep
 import threading
+from datetime import datetime
+import traceback
+import json
 app = Flask(__name__)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'allaboutstartingup'
-app.config['MAIL_PASSWORD'] = 'uaecsfchnzoutfqh'
+app.config['MAIL_USERNAME'] = '<your-username>'
+app.config['MAIL_PASSWORD'] = '<your-password>'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_DEFAULT_SENDER'] = 'allaboutstartingup@gmail.com'
+app.config['MAIL_DEFAULT_SENDER'] = '<your-email>'
 mail = Mail(app)
 
 
@@ -30,7 +33,6 @@ conn = psycopg2.connect(
 
 cur = conn.cursor()
 
-# create users table if not exists
 cur.execute("""
     CREATE TABLE IF NOT EXISTS users_db1 (
         id SERIAL PRIMARY KEY,
@@ -42,9 +44,10 @@ cur.execute("""
 
 
 cur.execute(
-    "CREATE TABLE IF NOT EXISTS subscribers_db (id SERIAL PRIMARY KEY, email TEXT NOT NULL)")
+    """CREATE TABLE IF NOT EXISTS subscribers_db (id SERIAL PRIMARY KEY, email TEXT NOT NULL)""")
 
-# close the cursor and connection
+cur.execute(
+    """CREATE TABLE IF NOT EXISTS analytics_db (id SERIAL PRIMARY KEY, email TEXT NOT NULL, status TEXT NOT NULL, time TEXT NOT NULL)""")
 cur.close()
 
 
@@ -138,28 +141,36 @@ def subscribers():
 def send_email(subject, body):
     with app.app_context():
         subscribers = get_all_subscribers()
+        print(subscribers)
         for subscriber in subscribers:
             try:
                 msg = Message(subject=subject, recipients=[subscriber[1]])
                 msg.body = body
                 mail.send(msg)
-                update_status_in_database(subscriber[1], "Sent")
-            except:
-                update_status_in_database(subscriber[1], "Failed")
-
-
-def update_status_in_database(email, status):
-
-    cur.execute("""
-            UPDATE subscribers_db SET status = ? WHERE email = ?
-        """, (status, email))
-
-    conn.commit()
+                cur = conn.cursor()
+                cur.execute("""INSERT INTO analytics_db (email, status, time)
+                VALUES (%s, %s, %s)
+                RETURNING id;
+            """, (subscriber[1], 'Sent', str(datetime.now())))
+                conn.commit()
+                    
+            except Exception as e: 
+                
+                print(traceback.print_exc(),e,"e")
+                cur = conn.cursor()
+                cur.execute("""
+                INSERT INTO analytics_db (email, status, time)
+                VALUES (%s, %s, %s)
+                RETURNING id;
+            """, (subscriber[1], e, str(datetime.now())))
+                conn.commit()
+                continue
+                    
 
 
 def send_emails(subject, body, time):
     schedule.every().day.at(time).do(send_email, subject, body)
-    while True:
+    while True:        
         schedule.run_pending()
         sleep(1)
 
@@ -170,11 +181,32 @@ def send_mail():
     subject = request.json['subject']
     body = request.json['body']
     time = request.json['time']
+    
     email_thread = threading.Thread(
         target=send_emails, args=(subject, body, time))
     email_thread.start()
 
     return jsonify({'message': 'Messages queued sucessfully'})
+
+def get_data():
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM analytics_db")
+    rows = cur.fetchall()
+    
+    return rows
+    
+
+@app.route('/api/data', methods=['GET'])
+@cross_origin()
+def data():
+    data = get_data()
+    result = []
+    for row in data:
+        line = json.dumps({'id': row[0], 'email': row[1], 'status': row[2], 'time': row[3]})
+        result.append(json.loads(line))
+    result = result[::-1]
+    return jsonify(result)
+
 
 
 if __name__ == "__main__":

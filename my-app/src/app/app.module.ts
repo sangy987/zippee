@@ -11,8 +11,9 @@ import { HomeComponent } from './components/home/home.component';
 import { SubscribeComponent } from './components/subscribe/subscribe.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { NbThemeModule, NbLayoutModule, NbButtonGroupModule, NbInputModule, NbFormFieldModule, NbCardModule, NbIconModule, NbTimepickerModule } from '@nebular/theme';
+import { NbThemeModule, NbLayoutModule, NbButtonGroupModule, NbInputModule, NbFormFieldModule, NbCardModule, NbIconModule, NbTimepickerModule, NbTableModule, NbAlertModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,6 +39,8 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
     NbIconModule,
     NbTimepickerModule.forRoot(),
     NbTimepickerModule,
+    Ng2SmartTableModule,
+    NbAlertModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

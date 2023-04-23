@@ -22,6 +22,7 @@ export class LoginComponent {
   password: string = '';
   isSignedUp = false;
   message: string = '';
+  authenticated: boolean= false;
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -35,7 +36,10 @@ export class LoginComponent {
       (response) => {
         {
           if (response.success == true) {
-            this.router.navigate(['/dashboard']);
+            this.authenticated = true;
+            setTimeout(() => {
+              this.router.navigate(['/dashboard']);
+            }, 2000);
           }
         }
         if (response.success == false) {
