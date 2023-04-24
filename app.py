@@ -15,11 +15,11 @@ cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = '<your-username>'
-app.config['MAIL_PASSWORD'] = '<your-password>'
+app.config['MAIL_USERNAME'] = ''
+app.config['MAIL_PASSWORD'] = ''
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_DEFAULT_SENDER'] = '<your-email>'
+app.config['MAIL_DEFAULT_SENDER'] = ''
 mail = Mail(app)
 
 
@@ -50,10 +50,6 @@ cur.execute(
     """CREATE TABLE IF NOT EXISTS analytics_db (id SERIAL PRIMARY KEY, email TEXT NOT NULL, status TEXT NOT NULL, time TEXT NOT NULL)""")
 cur.close()
 
-
-@app.route("/")
-def index():
-    return "Homepage of GeeksForGeeks"
 
 
 @app.route('/api/signup', methods=['POST'])
